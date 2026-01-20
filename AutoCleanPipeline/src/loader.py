@@ -1,8 +1,11 @@
 ﻿import pandas as pd
 from pathlib import Path
+import tkinter as tk
+from tkinter import filedialog
 
 class FileLoader:
 
+    #Dictionary for getting function for related CSV
     _READERS = {
         ".csv": pd.read_csv,
         ".xlsx": pd.read_excel,
@@ -16,19 +19,34 @@ class FileLoader:
         ".orc": pd.read_orc,
         ".pkl": pd.read_pickle,
     }
+    #Function to convert data in Dataframe
+    
+
+    def upload_file(self):
+        root = tk.Tk()
+        file_path = filedialog.askopenfilename(title="Select Data source", filetypes=[("All files", "*.*")])
+        root.destroy()
+        return file_path
 
     def load(self, file_path: str) -> pd.DataFrame: 
         ext = Path(file_path).suffix.lower()
+<<<<<<< HEAD
+=======
+        print(ext)
 
+>>>>>>> 05d421be5f0ab340fbc062fc0716b381aceae0a5
         if ext not in self._READERS:
             raise ValueError(f"Unsupported file type: {ext}")
 
         try:
-     
             df = self._READERS[ext](file_path)
+<<<<<<< HEAD
+            if isinstance(df, list):    # read_html returns a list 
+=======
 
-            # pd.read_html returns a list → normalize
+            # read_html returns a list 
             if isinstance(df, list):
+>>>>>>> 05d421be5f0ab340fbc062fc0716b381aceae0a5
                 df = df[0]
 
             print(f"Loaded {file_path} with shape {df.shape}")
@@ -36,3 +54,4 @@ class FileLoader:
 
         except Exception as e:
             raise RuntimeError(f"Failed to load {file_path}: {e}")
+
