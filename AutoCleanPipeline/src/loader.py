@@ -30,23 +30,12 @@ class FileLoader:
 
     def load(self, file_path: str) -> pd.DataFrame: 
         ext = Path(file_path).suffix.lower()
-<<<<<<< HEAD
-=======
-        print(ext)
-
->>>>>>> 05d421be5f0ab340fbc062fc0716b381aceae0a5
         if ext not in self._READERS:
             raise ValueError(f"Unsupported file type: {ext}")
 
         try:
             df = self._READERS[ext](file_path)
-<<<<<<< HEAD
-            if isinstance(df, list):    # read_html returns a list 
-=======
-
-            # read_html returns a list 
-            if isinstance(df, list):
->>>>>>> 05d421be5f0ab340fbc062fc0716b381aceae0a5
+            if isinstance(df, list):    # read_html returns a list
                 df = df[0]
 
             print(f"Loaded {file_path} with shape {df.shape}")
