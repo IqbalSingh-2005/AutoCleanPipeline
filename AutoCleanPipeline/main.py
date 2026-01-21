@@ -8,5 +8,7 @@ c_clean = column_cleaner()
 
 raw_data = loader.upload_file()
 df = loader.load(str(raw_data))
-f = c_clean.stdn(df)
-print(f.head())
+df = c_clean.stdn(df)
+df = c_clean.missing_data(df)
+
+print(df.head())
