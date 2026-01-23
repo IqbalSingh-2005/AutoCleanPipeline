@@ -43,13 +43,13 @@ class column_cleaner:
                     if pd.isna(str_data):
                         continue
 
-                    s = str.split(str_data)
+                    s = str_data.split()
                     for alpha in s:
                         if alpha.isalpha():
-                            print("verified")
-
+                            df[col] = df[col].astype(str)
                             found = True
                             break
+
                 if found:
                     break
             else:
