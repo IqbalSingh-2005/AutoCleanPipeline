@@ -11,5 +11,6 @@ df = loader.load(str(raw_data))
 df = c_clean.stdn(df)
 df = c_clean.data_type_convt(df)
 df = c_clean.missing_data(df)
+df = c_clean.detect_outliers_iqr(df,"salary")
 
 print(df.head())

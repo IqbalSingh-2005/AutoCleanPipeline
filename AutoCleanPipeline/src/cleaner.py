@@ -15,6 +15,8 @@ class column_cleaner:
                       .str.replace(" ","_")
                       .str.replace(r"[^a-z0-9_]", "", regex=True)
         )
+        #duplicate removal
+        df = df.loc[:, ~df.columns.duplicated()]
 
         return df
 
@@ -61,4 +63,30 @@ class column_cleaner:
                 print(col, "1")
 
         print(df.dtypes)
+        return df
+
+    def detect_outliers_iqr(self, df, col):
+        """
+        Returns a DataFrame with an additional column:
+        - <col>_outlier = True if outlier else False
+        """
+        df = df.copy()
+
+        # Calculate Q1 and Q3
+        Q1 = np.percentile(df[col].dropna(), 25)
+        Q3 = np.percentile(df[col].dropna(), 75)
+
+        IQR = Q3 - Q1
+
+        # Outlier bounds
+        lower_bound = Q1 - 1.5 * IQR
+        upper_bound = Q3 + 1.5 * IQR
+
+        # Flag outliers
+        df[f"{col}_outlier"] = ~df[col].between(lower_bound, upper_bound)
+
+        print(f"{col}: Q1={Q1}, Q3={Q3}, IQR={IQR}")
+        print(f"Lower={lower_bound}, Upper={upper_bound}")
+        print("Outliers count:", df[f"{col}_outlier"].sum())
+
         return df
