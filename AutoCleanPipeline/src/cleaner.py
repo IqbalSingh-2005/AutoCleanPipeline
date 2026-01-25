@@ -1,6 +1,7 @@
-﻿import pandas as pd
+﻿from numpy._core import numeric
+import pandas as pd
 import numpy as np
-from pandas.api.types import is_string_dtype
+from pandas.api.types import is_float, is_integer, is_string_dtype
 
 class column_cleaner:
  
@@ -32,63 +33,32 @@ class column_cleaner:
         return df
         
     def data_type_convt(self, df: pd.DataFrame) -> pd.DataFrame:
-        #str to str 
         df = df.copy()
-        for col in df:
-            if(pd.api.types.is_string_dtype(df[col]) 
-                or pd.api.types.is_object_dtype(df[col])):
-                found = False
-                for i in range(df.shape[0]):
-                    str_data = df.loc[i,col]
 
-                    if pd.isna(str_data):
+        for col in df.columns:
+            if pd.api.types.is_object_dtype(df[col]) or pd.api.types.is_string_dtype(df[col]):
+
+                is_all_numeric = True
+
+                for val in df[col]:
+                    if pd.isna(val):
                         continue
-
-                    s = str_data.split()
-                    for alpha in s:
-                        if alpha.isalpha():
-                            df[col] = df[col].convert_dtypes()
-                            found = True
-                            break
-
-                    if found:
-                        break
-            else:
-                print(col,"1")
-
-        # int
-        
-        # int / numeric detection
-
-        for col in df:
-            if (pd.api.types.is_string_dtype(df[col]) or
-                pd.api.types.is_object_dtype(df[col])):
-
-                alpha_found = False
-
-                for i in range(df.shape[0]):
-                    str_data = df.loc[i, col]
-
-                    if pd.isna(str_data):
-                        continue
-
-                    s = str(str_data).split()
-                    for token in s:
-                        if token.isalpha():
-                            alpha_found = True
-                            break
-
-                    if alpha_found:
+                    try:
+                        float(val)
+                    except (ValueError, TypeError):
+                        is_all_numeric = False
                         break
 
-                # 🔑 decision AFTER full scan
-                if not alpha_found:
-                    df[col] = df[col].astype(float)
+                # 🔑 ONE decision per column
+                if is_all_numeric:
+                    df[col] = pd.to_numeric(df[col], errors="coerce").astype(float)
+
+                
+                else:
+                    df[col] = df[col].astype("string")
 
             else:
                 print(col, "1")
 
         print(df.dtypes)
         return df
-
-    
