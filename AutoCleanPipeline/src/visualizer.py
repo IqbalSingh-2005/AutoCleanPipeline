@@ -9,4 +9,7 @@ def visual(df: pd.DataFrame):
 
     ax.plot(x,y)
     plt.show()
+
+
+
   
