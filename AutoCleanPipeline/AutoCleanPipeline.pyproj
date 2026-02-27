@@ -23,6 +23,20 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AutoCleanSet\AutoCleanUI\admin.py" />
+    <Compile Include="AutoCleanSet\AutoCleanUI\apps.py" />
+    <Compile Include="AutoCleanSet\AutoCleanUI\migrations\__init__.py" />
+    <Compile Include="AutoCleanSet\AutoCleanUI\models.py" />
+    <Compile Include="AutoCleanSet\AutoCleanUI\tests.py" />
+    <Compile Include="AutoCleanSet\AutoCleanUI\urls.py" />
+    <Compile Include="AutoCleanSet\AutoCleanUI\views.py" />
+    <Compile Include="AutoCleanSet\AutoCleanUI\__init__.py" />
+    <Compile Include="AutoCleanSet\AutoClean\asgi.py" />
+    <Compile Include="AutoCleanSet\AutoClean\settings.py" />
+    <Compile Include="AutoCleanSet\AutoClean\urls.py" />
+    <Compile Include="AutoCleanSet\AutoClean\wsgi.py" />
+    <Compile Include="AutoCleanSet\AutoClean\__init__.py" />
+    <Compile Include="AutoCleanSet\manage.py" />
     <Compile Include="main.py" />
     <Compile Include="src\cleaner.py" />
     <Compile Include="src\database.py" />
@@ -42,6 +56,13 @@
     </Interpreter>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="AutoCleanSet\" />
+    <Folder Include="AutoCleanSet\AutoCleanUI\" />
+    <Folder Include="AutoCleanSet\AutoCleanUI\migrations\" />
+    <Folder Include="AutoCleanSet\AutoCleanUI\static\" />
+    <Folder Include="AutoCleanSet\AutoCleanUI\templates\" />
+    <Folder Include="AutoCleanSet\AutoCleanUI\templates\components\" />
+    <Folder Include="AutoCleanSet\AutoClean\" />
     <Folder Include="data\" />
     <Folder Include="data\cleaned\" />
     <Folder Include="data\raw\" />
@@ -50,6 +71,10 @@
     <Folder Include="src\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AutoCleanSet\AutoCleanUI\static\Auto1.png" />
+    <Content Include="AutoCleanSet\AutoCleanUI\templates\base.html" />
+    <Content Include="AutoCleanSet\AutoCleanUI\templates\components\navbar.html" />
+    <Content Include="AutoCleanSet\AutoCleanUI\templates\components\sidebar.html" />
     <Content Include="test\Salary.csv" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
