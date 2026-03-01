@@ -1,0 +1,48 @@
+<!--
+================================================================================
+AUTOCLEANPIPELINE FAVICON
+================================================================================
+Description:
+    Custom SVG icon representing data cleaning and pipeline automation.
+    Combines a document/data icon with sparkles (cleaning) and flow arrows (pipeline).
+
+Design Elements:
+    - Document shape: Represents data files
+    - Sparkles: Represents cleaning/sanitization
+    - Circular arrow: Represents automated pipeline flow
+
+Colors:
+    - Primary: #2563EB (Blue-600) - Trust, technology
+    - Accent: #10B981 (Emerald-500) - Clean, fresh, success
+
+Author: AutoCleanPipeline Team
+================================================================================
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Background Circle -->
+  <circle cx="32" cy="32" r="30" fill="#2563EB" />
+  
+  <!-- Document/Data Icon -->
+  <path d="M22 14h14l8 8v28a2 2 0 0 1-2 2H22a2 2 0 0 1-2-2V16a2 2 0 0 1 2-2z" 
+        fill="white" stroke="none"/>
+  <path d="M36 14v8h8" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Data Lines on Document -->
+  <line x1="26" y1="30" x2="38" y2="30" stroke="#2563EB" stroke-width="2" stroke-linecap="round"/>
+  <line x1="26" y1="36" x2="34" y2="36" stroke="#2563EB" stroke-width="2" stroke-linecap="round"/>
+  <line x1="26" y1="42" x2="36" y2="42" stroke="#2563EB" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Sparkle/Clean Effect (Top Right) -->
+  <g fill="#10B981">
+    <!-- Main Sparkle -->
+    <path d="M48 12l1.5 3 3 1.5-3 1.5-1.5 3-1.5-3-3-1.5 3-1.5z"/>
+    <!-- Small Sparkle -->
+    <circle cx="54" cy="22" r="2"/>
+    <circle cx="42" cy="8" r="1.5"/>
+  </g>
+  
+  <!-- Circular Arrow (Pipeline Flow) -->
+  <path d="M50 38a14 14 0 0 1-24 10" 
+        fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round"/>
+  <path d="M24 50l2-4 4 2" fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

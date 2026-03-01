@@ -1,0 +1,102 @@
+
+
+<!-- 
+    OVERLAY 
+-->
+<div id="sidebar-overlay"
+     class="fixed inset-0 bg-black/60 
+     z-40 hidden transition-opacity duration-300">
+</div>
+
+<!-- 
+    SIDEBAR CONTAINER
+-->
+<div id="mobile-menu"
+     class="fixed top-0 right-0 h-full w-64
+     bg-white text-Black font-bold
+     border
+     transform
+     translate-x-full
+     transition-transform
+     duration-300 ease-in-out z-50 shadow-2xl">
+
+    <!-- 
+        HEADER SECTION
+    -->
+    <div class="flex items-center justify-end h-[70px] px-4 border-b">
+        <!-- 
+            CLOSE BUTTON
+        -->
+        <button id="close-sidebar-btn" 
+                class="p-2 active:bg-black active:text-white rounded-full cursor-pointer transition-all"
+                aria-label="Close menu">
+            <svg class="w-10 h-10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6.99486 7.00636C6.60433 7.39689 6.60433 8.03005 6.99486 8.42058L10.58 12.0057L6.99486 15.5909C6.60433 15.9814 6.60433 16.6146 6.99486 17.0051C7.38538 17.3956 8.01855 17.3956 8.40907 17.0051L11.9942 13.4199L15.5794 17.0051C15.9699 17.3956 16.6031 17.3956 16.9936 17.0051C17.3841 16.6146 17.3841 15.9814 16.9936 15.5909L13.4084 12.0057L16.9936 8.42059C17.3841 8.03007 17.3841 7.3969 16.9936 7.00638C16.603 6.61585 15.9699 6.61585 15.5794 7.00638L11.9942 10.5915L8.40907 7.00636C8.01855 6.61584 7.38538 6.61584 6.99486 7.00636Z" fill="currentColor" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- 
+        NAVIGATION MENU ITEMS
+    -->
+    <div class="flex flex-col divide-y border-b">
+        <a href="#" class="px-5 py-4 active:bg-black active:text-white text-lg transition-all">Home</a>
+        <a href="#" class="px-5 py-4 active:bg-black active:text-white text-lg transition-all">Workspace</a>
+        <a href="#" class="px-5 py-4 active:bg-black active:text-white text-lg transition-all">About</a>
+    </div>
+
+</div>
+
+<!--
+================================================================================
+SIDEBAR JAVASCRIPT
+================================================================================
+-->
+<script>
+  // Get DOM elements
+  const btn = document.getElementById("menu-btn");           
+  const menu = document.getElementById("mobile-menu");       
+  const overlay = document.getElementById("sidebar-overlay"); 
+  const closeBtn = document.getElementById("close-sidebar-btn"); 
+
+  /**
+   * Opens the sidebar
+   */
+  function openSidebar() {
+    menu.classList.remove("translate-x-full");
+    overlay.classList.remove("hidden");
+  }
+
+  /**
+   * Closes the sidebar
+   */
+  function closeSidebar() {
+    menu.classList.add("translate-x-full");
+    overlay.classList.add("hidden");
+  }
+
+  /**
+   * Toggles sidebar open/closed state
+   */
+  function toggleSidebar() {
+    if (menu.classList.contains("translate-x-full")) {
+      openSidebar();
+    } else {
+      closeSidebar();
+    }
+  }
+
+  // Initialize event listeners (with null checks for safety)
+  if (btn && menu && overlay) {
+    // Toggle sidebar when burger menu is clicked
+    btn.addEventListener("click", toggleSidebar);
+
+    // Close sidebar when clicking outside (on overlay)
+    overlay.addEventListener("click", closeSidebar);
+
+    // Close sidebar when X button is clicked
+    if (closeBtn) {
+      closeBtn.addEventListener("click", closeSidebar);
+    }
+  }
+</script>

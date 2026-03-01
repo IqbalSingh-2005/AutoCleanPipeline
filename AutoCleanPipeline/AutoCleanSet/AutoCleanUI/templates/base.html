@@ -1,15 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
 <head>
     <meta charset="UTF-8" />
-    <title>Hello, world!</title>
+    <title>AutoCleanPipeline</title>
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <meta name="description" content="" />
-    <link rel="icon" href="favicon.png">
+    <meta name="description" content="AutoCleanPipeline - Automated data cleaning and pipeline tool" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{% static 'favicon.svg' %}">
+    <link rel="apple-touch-icon" href="{% static 'favicon.svg' %}">
 </head>
 <body>
     <nav>
         {% include "components/navbar.html" %}
+        {% include "components/sidebar.html" %}
     </nav>
 
     

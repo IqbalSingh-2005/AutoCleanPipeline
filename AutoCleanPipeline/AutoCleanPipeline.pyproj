@@ -13,6 +13,7 @@
     <RootNamespace>AutoCleanPipeline</RootNamespace>
     <InterpreterId>MSBuild|env|$(MSBuildProjectFullPath)</InterpreterId>
     <IsWindowsApplication>False</IsWindowsApplication>
+    <SuppressConfigureTestFrameworkPrompt>true</SuppressConfigureTestFrameworkPrompt>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -72,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AutoCleanSet\AutoCleanUI\static\Auto1.png" />
+    <Content Include="AutoCleanSet\AutoCleanUI\static\favicon.svg" />
     <Content Include="AutoCleanSet\AutoCleanUI\templates\base.html" />
     <Content Include="AutoCleanSet\AutoCleanUI\templates\components\navbar.html" />
     <Content Include="AutoCleanSet\AutoCleanUI\templates\components\sidebar.html" />
