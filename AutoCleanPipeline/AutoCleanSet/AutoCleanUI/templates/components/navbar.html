@@ -16,20 +16,52 @@
         </div>
 
         <!-- Upload File Button -->
-        <button class="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-5
-                border-r
-                border-black font-bold text-sm sm:text-base
-                cursor-pointer
-                active:border-[5px]
-                active:border-t-0
-                active:border-l-0">
-            <span class="hidden xs:inline">Upload Files</span>
-            <span class="xs:hidden">Upload</span>
+        <form id="upload-form"
+              method="POST"
+              action="{% url 'upload_file' %}"
+              enctype="multipart/form-data"
+              class="border-r border-black">
+            {% csrf_token %}
 
-            <svg class="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M17 17H17.01M15.6 14H18C18.9319 14 19.3978 14 19.7654 14.1522C20.2554 14.3552 20.6448 14.7446 20.8478 15.2346C21 15.6022 21 16.0681 21 17C21 17.9319 21 18.3978 20.8478 18.7654C20.6448 19.2554 20.2554 19.6448 19.7654 19.8478C19.3978 20 18.9319 20 18 20H6C5.06812 20 4.60218 20 4.23463 19.8478C3.74458 19.6448 3.35523 19.2554 3.15224 18.7654C3 18.3978 3 17.9319 3 17C3 16.0681 3 15.6022 3.15224 15.2346C3.35523 14.7446 3.74458 14.3552 4.23463 14.1522C4.60218 14 5.06812 14 6 14H8.4M12 15V4M12 4L15 7M12 4L9 7" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-        </button>
+            <input id="file-input"
+                   type="file"
+                   name="file"
+                   accept=".csv,.xlsx,.xls,.json,.html,.parquet,.pkl,.hdf,.feather,.orc"
+                   hidden />
+
+            <button id="upload-btn"
+                    type="button"
+                    class="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-5
+                     border-black font-bold text-sm sm:text-base
+                     cursor-pointer
+                     active:border-[5px]
+                     active:border-t-0
+                     active:border-l-0">
+                <span class="hidden xs:inline">Upload Files</span>
+                <span class="xs:hidden">Upload</span>
+
+                <svg class="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17 17H17.01M15.6 14H18C18.9319 14 19.3978 14 19.7654 14.1522C20.2554 14.3552 20.6448 14.7446 20.8478 15.2346C21 15.6022 21 16.0681 21 17C21 17.9319 21 18.3978 20.8478 18.7654C20.6448 19.2554 20.2554 19.6448 19.7654 19.8478C19.3978 20 18.9319 20 18 20H6C5.06812 20 4.60218 20 4.23463 19.8478C3.74458 19.6448 3.35523 19.2554 3.15224 18.7654C3 18.3978 3 17.9319 3 17C3 16.0681 3 15.6022 3.15224 15.2346C3.35523 14.7446 3.74458 14.3552 4.23463 14.1522C4.60218 14 5.06812 14 6 14H8.4M12 15V4M12 4L15 7M12 4L9 7" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </button>
+        </form>
+
+        <script>
+            (function () {
+                const uploadBtn = document.getElementById("upload-btn");
+                const fileInput = document.getElementById("file-input");
+                const form = document.getElementById("upload-form");
+
+                uploadBtn.addEventListener("click", () => fileInput.click());
+
+                fileInput.addEventListener("change", () => {
+                    if (fileInput.files && fileInput.files.length > 0) {
+                        form.submit(); // sends to Django upload_file view
+                    }
+                });
+            })();
+        </script>
+
 
         <!-- File Info Section -->
         <div class="flex items-center gap-2 md:gap-3 lg:gap-6 px-2 lg:px-4 font-bold text-xs sm:text-sm lg:text-base">

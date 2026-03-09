@@ -16,7 +16,7 @@ def index(request):
     latest_file = UploadedFile.objects.first()
 
     if not latest_file:
-        return render(request, 'dashboard.html', {
+        return render(request, 'base.html', {
             'latest_file': None,
             'raw_data': None,
             'summary': None,
@@ -37,10 +37,10 @@ def index(request):
             'cleaned_data': cleaned_data.to_dict('records')[:10],
         }
 
-        return render(request, 'dashboard.html', context)
+        return render(request, 'base.html', context)
 
     except Exception as e:
-        return render(request, 'dashboard.html', {
+        return render(request, 'base.html', {
             'latest_file': latest_file,
             'error': str(e),
         })
@@ -50,9 +50,10 @@ def upload_file(request):
     """Handle file upload"""
     if request.method == 'POST' and request.FILES.get('file'):
         uploaded_file = request.FILES['file']
-        file_instance = UploadedFile.objects.create(
+        UploadedFile.objects.create(
             file=uploaded_file,
-            file_size=uploaded_file.size
+            filename=uploaded_file.name,
+            file_size=uploaded_file.size,
         )
         return redirect('index')
 
