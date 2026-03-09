@@ -6,18 +6,246 @@
     <title>AutoCleanPipeline</title>
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="description" content="AutoCleanPipeline - Automated data cleaning and pipeline tool" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="{% static 'favicon.svg' %}">
     <link rel="apple-touch-icon" href="{% static 'favicon.svg' %}">
 </head>
-<body>
-    <nav>
-        {% include "components/navbar.html" %}
-        {% include "components/sidebar.html" %}
-        {% include "components/info_card.html" %}
-    </nav>
+<body class="bg-gray-50">
+    {% include "components/navbar.html" %}
 
-    
+    <!-- Info Cards -->
+    {% if summary %}
+    {% include "components/info_card.html" %}
+    {% endif %}
+
+    <!-- Chart Section -->
+    <div class="p-4 max-w-7xl mx-auto">
+        {% if all_columns %}
+        <div class="bg-white border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-6">
+            <!-- Header with Download Buttons -->
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold">📊 Data Visualization</h2>
+
+                <!-- Download Buttons -->
+                <div class="flex gap-2">
+                    <a href="{% url 'download_excel' %}" class="px-4 py-2 bg-green-600 text-white font-bold border-2 border-black hover:bg-green-700 active:translate-y-1 transition-all flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/>
+                        </svg>
+                        Download Excel
+                    </a>
+
+                    <button id="download-pdf-btn" class="px-4 py-2 bg-red-600 text-white font-bold border-2 border-black hover:bg-red-700 active:translate-y-1 transition-all flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/>
+                        </svg>
+                        Download PDF
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chart Controls -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <!-- X-Axis Selector -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">X-Axis Column</label>
+                    <select id="x-column" class="w-full px-3 py-2 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        {% for col in all_columns %}
+                        <option value="{{ col }}" {% if forloop.first %}selected{% endif %}>{{ col }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Y-Axis Selector -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Y-Axis Column</label>
+                    <select id="y-column" class="w-full px-3 py-2 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        {% for col in numeric_columns %}
+                        <option value="{{ col }}" {% if forloop.counter == 2 %}selected{% endif %}>{{ col }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Chart Type Selector -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Chart Type</label>
+                    <select id="chart-type" class="w-full px-3 py-2 border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="line">📈 Line Chart</option>
+                        <option value="scatter">⚫ Scatter Plot</option>
+                        <option value="bar">📊 Bar Chart</option>
+                        <option value="area">📉 Area Chart</option>
+                        <option value="histogram">📶 Histogram</option>
+                        <option value="box">📦 Box Plot</option>
+                    </select>
+                </div>
+
+                <!-- Generate Button -->
+                <div class="flex items-end">
+                    <button id="generate-btn" class="w-full px-4 py-2 bg-black text-white font-bold border-2 border-black hover:bg-gray-800 active:translate-y-1 transition-all">
+                        Generate Chart
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading Indicator -->
+            <div id="loading" class="hidden text-center py-8">
+                <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-black"></div>
+                <p class="mt-4 text-gray-600 font-bold">Generating chart...</p>
+            </div>
+
+            <!-- Error Display -->
+            <div id="error-message" class="hidden bg-red-100 border-2 border-red-500 text-red-700 px-4 py-3 mb-4">
+                <span class="font-bold">Error:</span> <span id="error-text"></span>
+            </div>
+
+            <!-- Chart Display -->
+            <div id="chart-container" class="border-2 border-gray-300 bg-gray-50 min-h-[400px] flex items-center justify-center">
+                {% if default_chart %}
+                <img id="chart-image" src="data:image/png;base64,{{ default_chart }}" alt="Data Visualization" class="max-w-full h-auto">
+                {% else %}
+                <p class="text-gray-500 font-bold">Select columns and click "Generate Chart" to visualize your data</p>
+                {% endif %}
+            </div>
+        </div>
+        {% else %}
+        <div class="bg-white border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-8 text-center">
+            <p class="text-gray-600 text-lg">📁 No data available. Please upload a file to start visualizing.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        // Get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        const csrftoken = getCookie('csrftoken');
+
+        // Chart generation function
+        document.getElementById('generate-btn')?.addEventListener('click', function() {
+            const xColumn = document.getElementById('x-column').value;
+            const yColumn = document.getElementById('y-column').value;
+            const chartType = document.getElementById('chart-type').value;
+
+            const loading = document.getElementById('loading');
+            const chartContainer = document.getElementById('chart-container');
+            const errorMessage = document.getElementById('error-message');
+            const chartImage = document.getElementById('chart-image');
+
+            // Show loading
+            loading.classList.remove('hidden');
+            chartContainer.classList.add('hidden');
+            errorMessage.classList.add('hidden');
+
+            // Make AJAX request
+            fetch('/generate-chart/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': csrftoken
+                },
+                body: new URLSearchParams({
+                    'x_column': xColumn,
+                    'y_column': yColumn,
+                    'chart_type': chartType
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                loading.classList.add('hidden');
+
+                if (data.success) {
+                    // Update chart image
+                    if (!chartImage) {
+                        chartContainer.innerHTML = `<img id="chart-image" src="data:image/png;base64,${data.chart}" alt="Data Visualization" class="max-w-full h-auto">`;
+                    } else {
+                        chartImage.src = `data:image/png;base64,${data.chart}`;
+                    }
+                    chartContainer.classList.remove('hidden');
+                } else {
+                    // Show error
+                    document.getElementById('error-text').textContent = data.error;
+                    errorMessage.classList.remove('hidden');
+                    chartContainer.classList.remove('hidden');
+                }
+            })
+            .catch(error => {
+                loading.classList.add('hidden');
+                document.getElementById('error-text').textContent = 'Failed to generate chart: ' + error.message;
+                errorMessage.classList.remove('hidden');
+                chartContainer.classList.remove('hidden');
+            });
+        });
+
+        // Auto-generate on select change
+        document.getElementById('x-column')?.addEventListener('change', function() {
+            document.getElementById('generate-btn').click();
+        });
+
+        document.getElementById('y-column')?.addEventListener('change', function() {
+            document.getElementById('generate-btn').click();
+        });
+
+        document.getElementById('chart-type')?.addEventListener('change', function() {
+            document.getElementById('generate-btn').click();
+        });
+
+        // PDF Download function
+        document.getElementById('download-pdf-btn')?.addEventListener('click', function() {
+            const xColumn = document.getElementById('x-column').value;
+            const yColumn = document.getElementById('y-column').value;
+            const chartType = document.getElementById('chart-type').value;
+
+            // Create a form and submit it to download PDF
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/download-chart-pdf/';
+            form.style.display = 'none';
+
+            // Add CSRF token
+            const csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = 'csrfmiddlewaretoken';
+            csrfInput.value = csrftoken;
+            form.appendChild(csrfInput);
+
+            // Add chart parameters
+            const xInput = document.createElement('input');
+            xInput.type = 'hidden';
+            xInput.name = 'x_column';
+            xInput.value = xColumn;
+            form.appendChild(xInput);
+
+            const yInput = document.createElement('input');
+            yInput.type = 'hidden';
+            yInput.name = 'y_column';
+            yInput.value = yColumn;
+            form.appendChild(yInput);
+
+            const typeInput = document.createElement('input');
+            typeInput.type = 'hidden';
+            typeInput.name = 'chart_type';
+            typeInput.value = chartType;
+            form.appendChild(typeInput);
+
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form);
+        });
+    </script>
 </body>
 </html>

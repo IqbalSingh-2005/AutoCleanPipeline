@@ -599,8 +599,10 @@
     <Content Include="AutoCleanSet\AutoCleanUI\templates\base.html" />
     <Content Include="AutoCleanSet\AutoCleanUI\templates\components\info_card.html" />
     <Content Include="AutoCleanSet\AutoCleanUI\templates\components\navbar.html" />
+    <Content Include="AutoCleanSet\AutoCleanUI\templates\components\navbar_restored.html" />
     <Content Include="AutoCleanSet\AutoCleanUI\templates\components\sidebar.html" />
     <Content Include="AutoCleanSet\AutoCleanUI\templates\dashboard.html" />
+    <Content Include="DOWNLOAD_FEATURES.md" />
     <Content Include="env\.gitignore" />
     <Content Include="env\Lib\site-packages\pip-25.3.dist-info\entry_points.txt" />
     <Content Include="env\Lib\site-packages\pip-25.3.dist-info\INSTALLER" />
@@ -1085,6 +1087,7 @@
     <Content Include="env\Scripts\python.exe" />
     <Content Include="env\Scripts\pythonw.exe" />
     <Content Include="test\Salary.csv" />
+    <Content Include="UI_OPTIMIZATION_SUMMARY.md" />
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="env\">

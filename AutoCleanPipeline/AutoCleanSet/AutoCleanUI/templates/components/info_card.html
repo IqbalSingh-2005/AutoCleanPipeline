@@ -1,14 +1,95 @@
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
-<div class="p-1 flex items-center gap-2.5">
-    <div class="px-12 py-3 bg-white border  shadow-sm">
-        <div class="p-3">
-            <span class="font-semibold">
-                Rows:<br />
-                Columns:
-            </span> 
+<style>
+    /* Custom slim scrollbar */
+    .slim-scroll::-webkit-scrollbar {
+        height: 6px;
+    }
+    .slim-scroll::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+    .slim-scroll::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 10px;
+    }
+    .slim-scroll::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+</style>
+
+<!-- Horizontal Scrollable Info Cards -->
+<div class="overflow-x-auto slim-scroll">
+    <div class="flex gap-3 p-3 min-w-max">
+        {% if summary %}
+
+        <!-- Rows Card -->
+        <div class="bg-white border border-black p-3 min-w-[140px] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+            <div class="text-gray-600 text-xs font-bold uppercase mb-1">Rows</div>
+            <div class="text-2xl font-bold">{{ summary.rows }}</div>
         </div>
+
+        <!-- Columns Card -->
+        <div class="bg-white border border-black p-3 min-w-[140px] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+            <div class="text-gray-600 text-xs font-bold uppercase mb-1">Columns</div>
+            <div class="text-2xl font-bold">{{ summary.columns }}</div>
+        </div>
+
+        <!-- Memory Card -->
+        <div class="bg-white border border-black p-3 min-w-[140px] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+            <div class="text-gray-600 text-xs font-bold uppercase mb-1">Memory</div>
+            <div class="text-lg font-bold">{{ summary.memory.display }}</div>
+        </div>
+
+        <!-- Nulls Card -->
+        <div class="bg-white border border-black p-3 min-w-[140px] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+            <div class="text-gray-600 text-xs font-bold uppercase mb-1">Null Values</div>
+            <div class="text-2xl font-bold">{{ summary.nulls.total }}</div>
+            {% if summary.nulls.columns_with_nulls %}
+            <div class="text-xs text-gray-600 mt-1">
+                In: {{ summary.nulls.columns_with_nulls|join:", " }}
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Duplicates Card -->
+        <div class="bg-white border border-black p-3 min-w-[140px] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+            <div class="text-gray-600 text-xs font-bold uppercase mb-1">Duplicate Rows</div>
+            <div class="text-2xl font-bold">{{ summary.duplicates.duplicate_rows_count }}</div>
+            {% if summary.duplicates.duplicated_column_names %}
+            <div class="text-xs text-gray-600 mt-1">
+                Columns: {{ summary.duplicates.duplicated_column_names|join:", " }}
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Data Types Card -->
+        <div class="bg-white border border-black p-3 min-w-[180px] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+            <div class="text-gray-600 text-xs font-bold uppercase mb-1">Data Types</div>
+            <div class="space-y-0.5">
+                {% for col, dtype in summary.dtypes.items %}
+                <div class="text-xs">
+                    <span class="font-bold">{{ col }}:</span> 
+                    <span class="text-gray-600">{{ dtype }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Column Names Card -->
+        <div class="bg-white border border-black p-3 min-w-[180px] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+            <div class="text-gray-600 text-xs font-bold uppercase mb-1">Column Names</div>
+            <div class="space-y-0.5">
+                {% for col in summary.column_names %}
+                <div class="text-xs font-bold">• {{ col }}</div>
+                {% endfor %}
+            </div>
+        </div>
+
+        {% else %}
+        <div class="bg-white border border-black p-4 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+            <div class="text-gray-500 text-sm">📁 Upload a file to see summary</div>
+        </div>
+        {% endif %}
     </div>
-    
-    
 </div>
