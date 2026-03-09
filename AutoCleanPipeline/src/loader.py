@@ -1,7 +1,5 @@
 ﻿import pandas as pd
 from pathlib import Path
-import tkinter as tk
-from tkinter import filedialog
 
 class FileLoader:
 
@@ -20,9 +18,11 @@ class FileLoader:
         ".pkl": pd.read_pickle,
     }
     #Function to convert data in Dataframe
-    
+
 
     def upload_file(self):
+        import tkinter as tk
+        from tkinter import filedialog
         root = tk.Tk()
         file_path = filedialog.askopenfilename(title="Select Data source", filetypes=[("All files", "*.*")])
         root.destroy()
