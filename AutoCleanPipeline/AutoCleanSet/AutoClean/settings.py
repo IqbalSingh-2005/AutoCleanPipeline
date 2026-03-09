@@ -25,7 +25,12 @@ SECRET_KEY = 'django-insecure-dl6*w^3qs$&@9uvmt_f#ic18*=hnbklo4$d$0!k5+4jtwe2!g0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'dashboard.sparksx.me',
+    'www.dashboard.sparksx.me',
+]
 
 
 # Application definition
