@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-dl6*w^3qs$&@9uvmt_f#ic18*=hnbklo4$d$0!k5+4jtwe2!g0')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = 'True'
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',') + [
     'dashboard.sparksx.me',
@@ -137,6 +137,9 @@ STATICFILES_DIRS = [
 
 # WhiteNoise configuration for static file compression
 STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
